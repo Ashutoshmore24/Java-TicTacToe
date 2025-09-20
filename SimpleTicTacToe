@@ -1,0 +1,106 @@
+import java.util.*;
+public class Main {
+    public static void printBoard(char[][] board){
+        for(int row =0;row<board.length;row++){
+            for(int col =0;col<board[row].length;col++){
+                System.out.print(" " +board[row][col]+" ");
+                if(col!=board[row].length-1){
+                    System.out.print("|");
+                }
+            }
+            System.out.println();
+            if(row!=board.length-1){
+                System.out.println("___________");
+            }
+        }
+    }
+    
+    public static boolean haveWon(char[][] board,char player){
+        //chech row wise
+        for(int row =0;row<board.length;row++){
+            if(board[row][0]==player && board[row][1]==player && board[row][2]==player){
+                return true;
+            }
+        }
+        
+        //check column wise
+        for(int col =0;col<board.length;col++){
+            if(board[0][col]==player && board[1][col]==player && board[2][col]==player){
+                return true;
+            }
+        }
+        
+        //diagonal wise
+        
+        if(board[0][0]==player && board[1][1]==player && board[2][2]==player){
+            return true;
+        }
+        
+        if(board[0][2]==player && board[1][1]==player && board[2][0]==player){
+            return true;
+        }
+        return false;
+    }
+    
+    public static boolean isDraw(char[][] board){
+    for(int i=0;i<3;i++){
+        for(int j=0;j<3;j++){
+            if(board[i][j]==' ') return false;
+        }
+    }
+    return true;
+}
+
+    public static void main(String[] args) {
+        char[][] board = new char[3][3];
+        
+        //initialize
+        for(int row=0;row<board.length;row++){
+            for(int col =0;col<board[row].length;col++){
+                board[row][col]=' ';
+            }
+        }
+        
+        Scanner sc = new Scanner(System.in);
+        char player = 'X';
+        boolean gameOver = false;
+        
+        while(!gameOver){
+            printBoard(board);
+            System.out.println("\nPlayer "+player+" Enter your move(row,col) : ");
+            int row = sc.nextInt();
+            int col = sc.nextInt();
+         
+            if(row < 0 || row >= 3 || col < 0 || col >= 3){
+                System.out.println("Invalid Move! Row and Column must be 0, 1, or 2.");
+                continue;
+            }
+            
+            //already occupied or not
+            if(board[row][col]==' '){
+                board[row][col]=player;
+                gameOver = haveWon(board,player);
+                if(gameOver){
+                    printBoard(board);
+                    System.out.println("\nCongratulation ! , Player "+player +" WON !!!");
+                }
+                else if(isDraw(board)){
+                    printBoard(board);
+                    System.out.println("\nIt's a Draw !!!");
+                    break; 
+                }
+                else{
+                    //rotate the player
+                    player = (player=='X')?'O':'X';
+                }
+                
+            }else{
+                System.out.println("Cannot Placed , Place is Already Occupied !!!");
+            }
+            
+            
+        } 
+        sc.close();
+       
+    }
+}
